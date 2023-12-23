@@ -1,0 +1,61 @@
+package main
+
+import (
+	"fmt"
+	"math"
+	"time"
+)
+
+type Element struct {
+	parentID int
+	elementID int
+	content Content
+	priority int
+	
+	/*
+	* 0 = Article type
+	* 1 = Item type
+	* 2 = Tasks
+	*/
+	elementType int 
+	easeFactor  float64
+}
+
+type Content struct {
+	imageIDs 	[]int
+	templateIDs	[]int
+	textIDs		[]int
+	referenceIDs	[]int
+	videoIDs	[]int
+}
+
+
+func main() {
+	fmt.Println("Hello")
+	var intervals []int 
+	intervals = calculateIntervals(1.7, intervals)
+	
+	// print the intervals list
+	for _, value:= range intervals {
+		fmt.Println(value)
+		fmt.Println()
+		nextRepDate := setNextRepDate(value)
+		fmt.Println(nextRepDate)
+	}
+
+}
+
+func calculateIntervals(easeFactor float64, intervals []int) []int{
+	for i:=0; i <= 15; i++ {
+		result:= int(math.Round(4 * math.Pow(easeFactor, float64(i))))
+		intervals = append(intervals, result)
+	}
+	return intervals
+}
+
+func setNextRepDate(interval int) time.Time {
+	dateToday := time.Now()
+	nextDate := dateToday.Add(time.Duration(interval) * 24 * time.Hour)
+	return nextDate
+}
+
