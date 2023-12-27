@@ -7,31 +7,42 @@ import (
 )
 
 type Element struct {
-	// parentID int
-	// elementID int
-	// content Content
-	// priority int
-	
-	/*
+	parentID int
+	elementID int
+	content Content
+	priority int
+	/* uniqueId for each element type
 	* 0 = Article type
 	* 1 = Item type
 	* 2 = Tasks
 	*/
-	//elementType int
+	elementType int
 	interval int
 	grade int
 	EF  float64
 	//prevRepDate time.Time //TODO need to update prevRepDate and nextRepDate for every update
 	nextRepDate time.Time
+	templateId int
 }
 
-// type Content struct {
-// 	imageIDs 	[]int
-// 	templateIDs	[]int
-// 	textIDs		[]int
-// 	referenceIDs	[]int
-// 	videoIDs	[]int
-// }
+type Content struct {
+ 	imageIDs 	[]int
+ 	textIDs		[]int
+ 	referenceID	int
+ 	videoIDs	[]int
+}
+
+
+type Reference struct {
+	title        string
+	author       string
+	date         time.Time
+	source       string
+	link         string
+	parentTitle  string
+	conceptGroup string
+}
+
 
 
 func main() {
@@ -47,6 +58,10 @@ func main() {
 	updateLearningData(&myElement)
 	fmt.Printf("%+v\n", myElement)
 }
+
+func showContent(element *Element){
+	for 
+	
 
 func updateLearningData(element *Element){
 	element.EF = calculateNewEF(element.EF, element.grade)
