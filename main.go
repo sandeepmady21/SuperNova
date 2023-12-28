@@ -73,3 +73,4 @@ func calculateNewEF(oldEF float64, grade int) float64 {
 	newEF := oldEF - 0.8 + 0.28 * float64(grade) - 0.02 * float64(math.Pow(float64(grade), 2))
 	return newEF
 }
+ // michael was here 
