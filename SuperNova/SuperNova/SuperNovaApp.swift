@@ -11,7 +11,8 @@ import SwiftUI
 struct SuperNovaApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+           TextEditorViewController
         }
     }
+    
 }

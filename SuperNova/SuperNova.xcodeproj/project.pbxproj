@@ -8,17 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		5342C6862C2F7D0300C05472 /* SuperNovaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5342C6852C2F7D0300C05472 /* SuperNovaApp.swift */; };
-		5342C6882C2F7D0300C05472 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5342C6872C2F7D0300C05472 /* ContentView.swift */; };
 		5342C68A2C2F7D0400C05472 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5342C6892C2F7D0400C05472 /* Assets.xcassets */; };
 		5342C68D2C2F7D0400C05472 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5342C68C2C2F7D0400C05472 /* Preview Assets.xcassets */; };
+		5342C6942C2F7F8500C05472 /* TextEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5342C6932C2F7F8500C05472 /* TextEditorViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5342C6822C2F7D0300C05472 /* SuperNova.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SuperNova.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5342C6852C2F7D0300C05472 /* SuperNovaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperNovaApp.swift; sourceTree = "<group>"; };
-		5342C6872C2F7D0300C05472 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5342C6892C2F7D0400C05472 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5342C68C2C2F7D0400C05472 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		5342C6932C2F7F8500C05472 /* TextEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditorViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +35,7 @@
 		5342C6792C2F7D0300C05472 = {
 			isa = PBXGroup;
 			children = (
+				5342C6932C2F7F8500C05472 /* TextEditorViewController.swift */,
 				5342C6842C2F7D0300C05472 /* SuperNova */,
 				5342C6832C2F7D0300C05472 /* Products */,
 			);
@@ -52,7 +53,6 @@
 			isa = PBXGroup;
 			children = (
 				5342C6852C2F7D0300C05472 /* SuperNovaApp.swift */,
-				5342C6872C2F7D0300C05472 /* ContentView.swift */,
 				5342C6892C2F7D0400C05472 /* Assets.xcassets */,
 				5342C68B2C2F7D0400C05472 /* Preview Content */,
 			);
@@ -137,8 +137,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5342C6882C2F7D0300C05472 /* ContentView.swift in Sources */,
 				5342C6862C2F7D0300C05472 /* SuperNovaApp.swift in Sources */,
+				5342C6942C2F7F8500C05472 /* TextEditorViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
