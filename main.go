@@ -1,85 +1,121 @@
 package main
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
 
+// Modes for the editor
 type Mode int
 
 const (
 	Normal Mode = iota
 	Insert
-	Command
+	Visual
 )
 
+var currentMode Mode = Normal
+
+// Main function to run the editor
 func main() {
 	app := tview.NewApplication()
-	editor := tview.NewTextView().
-		SetDynamicColors(true).
-		SetRegions(true).
-		SetWordWrap(true)
+	textView := tview.NewTextView().SetDynamicColors(true)
+	textView.SetBorder(true).SetTitle("Go Vim Editor").SetTitleAlign(tview.AlignLeft)
+	textView.SetScrollable(true)
 
-	// Initial content and editor state
-	content := "Press 'i' to enter Insert mode, ':' for Command mode, and 'ESC' to return to Normal mode.\n"
-	editor.SetText(content)
-	mode := Normal
+	// Initial content
+	textContent := "Hello, this is a basic Vim-like editor with Goroutines!\n\nPress 'i' to enter Insert mode, 'v' for Visual mode, and 'Esc' to return to Normal mode."
+	textView.SetText(textContent)
 
-	// Capture key events for Vim-like behavior
-	editor.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		switch mode {
+	// Track cursor position
+	cursorX, cursorY := 0, 0
+
+	// Update editor mode and display mode status
+	updateMode := func() {
+		app.QueueUpdateDraw(func() {
+			switch currentMode {
+			case Normal:
+				textView.SetTitle("Go Vim Editor [Normal Mode]")
+			case Insert:
+				textView.SetTitle("Go Vim Editor [Insert Mode]")
+			case Visual:
+				textView.SetTitle("Go Vim Editor [Visual Mode]")
+			}
+		})
+	}
+
+	// Set up keybindings
+	textView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		switch currentMode {
 		case Normal:
 			switch event.Rune() {
-			case 'i': // Enter Insert Mode
-				mode = Insert
-			case 'h': // Move cursor left
-				// Handle left movement (tview doesn't support precise cursor manipulation directly)
-			case 'j': // Move cursor down
-				// Handle down movement
-			case 'k': // Move cursor up
-				// Handle up movement
-			case 'l': // Move cursor right
-				// Handle right movement
-			case ':': // Enter Command Mode
-				mode = Command
-				content += "\n:" // Display ":" as command prompt
-				editor.SetText(content)
+			case 'h':
+				cursorX = max(0, cursorX-1)
+			case 'j':
+				cursorY++
+			case 'k':
+				cursorY = max(0, cursorY-1)
+			case 'l':
+				cursorX++
+			case 'i':
+				currentMode = Insert
+				updateMode()
+			case 'v':
+				currentMode = Visual
+				updateMode()
+			}
+			if event.Key() == tcell.KeyEsc {
+				currentMode = Normal
+				updateMode()
 			}
 		case Insert:
-			switch event.Key() {
-			case tcell.KeyEsc: // Exit Insert Mode
-				mode = Normal
-			case tcell.KeyRune: // Add typed character
-				content += string(event.Rune())
-				editor.SetText(content)
-			case tcell.KeyBackspace, tcell.KeyBackspace2:
-				if len(content) > 0 {
-					content = content[:len(content)-1]
-					editor.SetText(content)
+			if event.Key() == tcell.KeyEsc {
+				currentMode = Normal
+				updateMode()
+			} else if event.Key() == tcell.KeyBackspace || event.Key() == tcell.KeyBackspace2 {
+				// Backspace logic (remove last character from text)
+				if len(textContent) > 0 {
+					textContent = textContent[:len(textContent)-1]
+					textView.SetText(textContent)
 				}
+			} else {
+				textContent += string(event.Rune())
+				textView.SetText(textContent)
 			}
-		case Command:
-			switch event.Key() {
-			case tcell.KeyEsc: // Exit Command Mode
-				mode = Normal
-				content = content[:len(content)-1] // Remove ":"
-				editor.SetText(content)
-			case tcell.KeyRune:
-				content += string(event.Rune())
-				editor.SetText(content)
-			case tcell.KeyEnter: // Execute Command (e.g., :q to quit)
-				if content[len(content)-2:] == ":q" {
-					app.Stop()
-				}
-				mode = Normal
-				content += "\n" // Clear command line
-				editor.SetText(content)
+		case Visual:
+			if event.Key() == tcell.KeyEsc {
+				currentMode = Normal
+				updateMode()
 			}
 		}
 		return event
 	})
 
-	if err := app.SetRoot(editor, true).Run(); err != nil {
+	// Start a background goroutine to update the status periodically
+	go func() {
+		ticker := time.NewTicker(2 * time.Second)
+		defer ticker.Stop()
+		for range ticker.C {
+			// Queue an update only if the application is running
+			app.QueueUpdateDraw(func() {
+				textView.SetText(fmt.Sprintf("%s\n\nStatus updated at: %s", textContent, time.Now().Format("15:04:05")))
+			})
+		}
+	}()
+
+	updateMode() // Initialize mode display
+	if err := app.SetRoot(textView, true).Run(); err != nil {
 		panic(err)
 	}
+}
+
+// Helper function to prevent negative cursor positions
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
